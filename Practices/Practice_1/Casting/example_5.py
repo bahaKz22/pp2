@@ -1,0 +1,6 @@
+a = int(23)
+b = float(23.56)
+c = complex(2, 3)
+print(a)
+print(b)
+print(c)
