@@ -1,0 +1,5 @@
+a = frozenset([1, 2, 3])
+b = frozenset([3, 4, 5])
+print(a.union(b))           # frozenset({1, 2, 3, 4, 5})
+print(a.intersection(b))    # frozenset({3})
+print(a.difference(b))      # frozenset({1, 2})

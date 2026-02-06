@@ -1,0 +1,3 @@
+colors = {"red", "green", "blue"}
+colors.clear()
+print(colors)  # set()
