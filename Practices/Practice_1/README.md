@@ -1,3 +1,3 @@
 # Practice_1
 ## Keywords
-![Keywords](https://iimg.su/i/fVRC84)
+![Keywords](/home/user/Documents/bbb/pp2/Practices/Practice_1/keywords.png)
