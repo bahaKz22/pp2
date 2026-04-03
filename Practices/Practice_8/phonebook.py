@@ -22,7 +22,6 @@ def list_tables():
     cur.close(); conn.close()
     return tables
 
-# ✅ CREATE TABLE (сол күйі)
 def create_table():
     name = input("Table name: ")
     query = f"CREATE TABLE IF NOT EXISTS {name} (name VARCHAR, phone VARCHAR);"
@@ -31,7 +30,6 @@ def create_table():
     cur.close(); conn.close()
     print(f"Table '{name}' created!")
 
-# ✅ ADD (процедура арқылы)
 def add_contact():
     conn = get_connection()
     cur = conn.cursor()
@@ -46,7 +44,6 @@ def add_contact():
     conn.close()
     print("Added!")
 
-# ✅ UPDATE (сол процедура)
 def update_contact():
     conn = get_connection()
     cur = conn.cursor()
@@ -61,7 +58,6 @@ def update_contact():
     conn.close()
     print("Updated!")
 
-# ✅ FIND (function)
 def find_contact():
     conn = get_connection()
     cur = conn.cursor()
@@ -80,7 +76,6 @@ def find_contact():
     cur.close()
     conn.close()
 
-# ✅ PAGINATION
 def show_page():
     conn = get_connection()
     cur = conn.cursor()
@@ -96,7 +91,6 @@ def show_page():
     cur.close()
     conn.close()
 
-# ✅ DELETE (procedure)
 def delete_contact():
     conn = get_connection()
     cur = conn.cursor()
@@ -110,7 +104,6 @@ def delete_contact():
     conn.close()
     print("Deleted!")
 
-# ✅ CSV (сол күйі)
 def insert_csv():
     conn = get_connection()
     cur = conn.cursor()
@@ -127,7 +120,6 @@ def insert_csv():
     conn.close()
     print("CSV inserted!")
 
-# 🔥 MENU
 while True:
     print("\n1.Create table")
     print("2.Add contact")
