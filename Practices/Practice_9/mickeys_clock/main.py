@@ -23,7 +23,7 @@ CLOCK_CENTER = (600, 340)
 clock = pygame.time.Clock()
 done = False
 
-# ✅ ИСПРАВЛЕНИЕ: правильный поворот вокруг основания стрелки
+#правильный поворот вокруг основания стрелки
 def rotate_hand(image, angle, center):
     rotated = pygame.transform.rotate(image, angle)
     w, h = image.get_size()
