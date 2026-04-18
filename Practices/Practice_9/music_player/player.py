@@ -1,79 +1,47 @@
 import pygame
-from clock import get_angles, rotate_hand
+import os
 
-pygame.init()
-SIZE = 800
-screen = pygame.display.set_mode((SIZE, SIZE))
-pygame.display.set_caption("Mickey's Minutes & Seconds Clock")
-clock = pygame.time.Clock()
-font = pygame.font.SysFont("Arial", 45, bold=True)
+class MusicPlayer:
+    def __init__(self, music_folder):
+        pygame.mixer.init()
 
-# Colors
-BLACK, WHITE = (0, 0, 0), (255, 255, 255)
-RED, YELLOW = (200, 0, 0), (255, 220, 0)
-SKIN, CREAM = (255, 220, 180), (245, 245, 220)
+        self.music_folder = music_folder
+        self.playlist = self.load_music()
+        self.current_index = 0
+        self.is_playing = False
 
-# Create Hand Surface
-def create_hand(length):
-    surf = pygame.Surface((length, 60), pygame.SRCALPHA)
-    pygame.draw.rect(surf, BLACK, (0, 25, length - 60, 12)) 
-    pygame.draw.ellipse(surf, WHITE, (length - 80, 10, 80, 50)) 
-    pygame.draw.ellipse(surf, BLACK, (length - 80, 10, 80, 50), 3)
-    return surf
+    def load_music(self):
+        files = [f for f in os.listdir(self.music_folder) if f.endswith(('.mp3', '.wav'))]
+        return files
 
-# Two hands only
-hand_surf = create_hand(320)
+    def play(self):
+        if not self.playlist:
+            print("No music found.")
+            return
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+        track = self.playlist[self.current_index]
+        path = os.path.join(self.music_folder, track)
 
-    min_ang, sec_ang = get_angles()
-    screen.fill(CREAM)
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play()
+        self.is_playing = True
 
-    center_x, center_y = SIZE // 2, SIZE // 2
-    
-    # 1. DRAW NUMBERS
-    pygame.draw.circle(screen, BLACK, (center_x, center_y), 385, 5)
-    for i in range(1, 13):
-        angle_rad = math.radians(i * 30 - 90)
-        num_x = center_x + 335 * math.cos(angle_rad)
-        num_y = center_y + 335 * math.sin(angle_rad)
-        num_text = font.render(str(i), True, BLACK)
-        screen.blit(num_text, num_text.get_rect(center=(int(num_x), int(num_y))))
+        print(f"Playing: {track}")
 
-    # 2. POSITION MICKEY HIGHER
-    mk_x, mk_y = center_x, center_y - 90 
+    def stop(self):
+        pygame.mixer.music.stop()
+        self.is_playing = False
+        print("Stopped")
 
-    # Mickey Body Parts
-    pygame.draw.ellipse(screen, YELLOW, (mk_x-140, mk_y+300, 100, 60)) 
-    pygame.draw.ellipse(screen, YELLOW, (mk_x+40, mk_y+300, 100, 60))  
-    pygame.draw.rect(screen, BLACK, (mk_x-100, mk_y+240, 15, 70))      
-    pygame.draw.rect(screen, BLACK, (mk_x+85, mk_y+240, 15, 70))       
-    pygame.draw.ellipse(screen, RED, (mk_x-100, mk_y+140, 200, 130))  
-    pygame.draw.circle(screen, WHITE, (mk_x-40, mk_y+200), 12)        
-    pygame.draw.circle(screen, WHITE, (mk_x+40, mk_y+200), 12) 
-    pygame.draw.ellipse(screen, BLACK, (mk_x-60, mk_y+80, 120, 100))  
-    pygame.draw.circle(screen, BLACK, (mk_x-110, mk_y-90), 75)        
-    pygame.draw.circle(screen, BLACK, (mk_x+110, mk_y-90), 75) 
-    pygame.draw.circle(screen, BLACK, (mk_x, mk_y), 100)              
-    pygame.draw.ellipse(screen, SKIN, (mk_x-80, mk_y-40, 160, 130))   
-    pygame.draw.circle(screen, WHITE, (mk_x-30, mk_y-20), 15)         
-    pygame.draw.circle(screen, WHITE, (mk_x+30, mk_y-20), 15) 
-    pygame.draw.circle(screen, BLACK, (mk_x, mk_y+10), 10)            
+    def next_track(self):
+        self.current_index = (self.current_index + 1) % len(self.playlist)
+        self.play()
 
-    # 3. DRAW ONLY TWO HANDS
-    pivot = (mk_x, mk_y + 50)
-    
-    # Right Hand = Minutes
-    m_img, m_rect = rotate_hand(hand_surf, min_ang, pivot)
-    screen.blit(m_img, m_rect)
-    
-    # Left Hand = Seconds
-    s_img, s_rect = rotate_hand(hand_surf, sec_ang, pivot)
-    screen.blit(s_img, s_rect)
+    def prev_track(self):
+        self.current_index = (self.current_index - 1) % len(self.playlist)
+        self.play()
 
-    pygame.display.flip()
-    clock.tick(60)
+    def get_current_track(self):
+        if not self.playlist:
+            return "No track"
+        return self.playlist[self.current_index]
